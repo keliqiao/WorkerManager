@@ -1,11 +1,15 @@
 #include "index.h"
 #include "workmanager.h"
 #include "employee.h"
+#include "manager.h"
+#include "boss.h"
 int main()
 {
 	workmanager wm;
 	int choice;
 	worker* wk=new Employee(1,"葛瑞雨",1);
+	worker* ma=new Manager(2,"谯可立",2);
+	worker* bo=new Boss(3,"Kaid",3);
 	while (true)
 	{
 		wm.showmenu();
@@ -30,10 +34,14 @@ int main()
 			}
 		case 3://删除职工
 			{
+				ma->showinfo();
+				delete ma;
 				break;
 			}
 		case 4://修改职工
 			{
+				bo->showinfo();
+				delete bo;
 				break;
 			}
 		case 5://查找职工
