@@ -9,7 +9,7 @@ int main()
 	while (true)
 	{
 		wm.showmenu();
-		cout<<"主人，请输入指令"<<endl;
+		cout<<"主人，请输入指令吧"<<endl;
 		cin>>choice;
 		switch (choice)
 		{
