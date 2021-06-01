@@ -123,7 +123,7 @@ void workmanager::Add_Emp()
 void workmanager::save()
 {
 	fstream operfile;
-	operfile.open("FILENAME", ios::out);
+	operfile.open(FILENAME, ios::out);
 	for (int i=0;i<m_EmpNum;i++)
 	{
 		operfile << m_EmpArray[i]->id << " "
