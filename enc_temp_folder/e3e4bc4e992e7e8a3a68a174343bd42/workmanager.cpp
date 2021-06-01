@@ -10,7 +10,7 @@ workmanager::workmanager()
 //析构函数
 workmanager::~workmanager()
 {
-	if (m_EmpArray != NULL)
+	if (m_EmpArray!=NULL)
 	{
 		delete[] m_EmpArray;
 		m_EmpArray = NULL;

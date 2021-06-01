@@ -4,6 +4,8 @@
 #include "employee.h"
 #include "manager.h"
 #include "worker.h"
+#include "fstream"
+#define  FILENAME "empFile.txt"
 class workmanager
 {
 public:
@@ -17,4 +19,6 @@ public:
 	worker ** m_EmpArray;
 	//添加员工
 	void Add_Emp();
+	//保存文件
+	void save();
 };
