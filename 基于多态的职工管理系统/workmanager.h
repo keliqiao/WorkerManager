@@ -21,4 +21,7 @@ public:
 	void Add_Emp();
 	//保存文件
 	void save();
+	bool fileopenstate;//判断文件打开状态为空还是没有文件或有数据
+	int getfilepeonum();//获取文件中所有员工总数
+	worker** getfiledata();//获取文件中的员工并且写入程序中
 };

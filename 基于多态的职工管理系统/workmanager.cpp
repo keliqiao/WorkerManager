@@ -2,10 +2,50 @@
 //构造函数
 workmanager::workmanager()
 {
-	//记录文件中的人数个数
-	m_EmpNum=0;
-	//员工数组的指针
-	m_EmpArray=NULL;
+	fstream tempfilestream;
+	tempfilestream.open(FILENAME, ios::in);
+	fileopenstate = tempfilestream.is_open();
+	//文件不存在时
+	if (!fileopenstate)
+	{
+		cout << "本地无数据文件" << endl;
+		//记录文件中的人数个数
+		m_EmpNum = 0;
+		//员工数组的指针
+		m_EmpArray = NULL;
+		tempfilestream.close();
+		return;
+	}else
+	//文件存在时
+	{
+		char tempchar;
+		tempfilestream >> tempchar;
+		if (tempfilestream.eof())
+		{
+			cout << "文件为空" << endl;
+			m_EmpArray = NULL;
+			m_EmpNum = 0;
+			fileopenstate = false;
+			tempfilestream.close();
+			return;
+		}else//当文件不为空时
+		{
+			int tenum;
+			tenum=getfilepeonum();
+			m_EmpNum = tenum;
+			cout << "当前文件中的总人数为：" << m_EmpNum << endl;
+			m_EmpArray = getfiledata();
+			for (int inum=0;inum<m_EmpNum;inum++)
+			{
+				cout << m_EmpArray[inum]->id << " "
+					<< m_EmpArray[inum]->name << " "
+					<< m_EmpArray[inum]->deptId << endl;
+			}
+			
+			
+		}
+	}
+	
 }
 //析构函数
 workmanager::~workmanager()
@@ -110,6 +150,7 @@ void workmanager::Add_Emp()
 		delete[] m_EmpArray;
 		m_EmpArray=newSpace;
 		m_EmpNum=newSize;
+		fileopenstate = true;
 		cout << "成功添加" << addNum << "个员工" << endl;
 	}else
 	{
@@ -132,3 +173,50 @@ void workmanager::save()
 	}
 	operfile.close();
 }
+int workmanager::getfilepeonum()
+{
+	int teid;
+	string tename;
+	int tedid;
+	fstream temfilestream;
+	temfilestream.open(FILENAME, ios::in);
+	int gnum = 0;
+	while (temfilestream>>teid&&temfilestream>>tename&&temfilestream>>tedid)
+	{
+		gnum++;
+	}
+	return gnum;
+}
+worker** workmanager::getfiledata()
+{
+	
+	worker** temwork = new worker * [m_EmpNum];
+	fstream filestreamtem;
+	filestreamtem.open(FILENAME, ios::in);
+	int tid;
+	string tname;
+	int tdid;
+	int num = 0;
+	worker* workt;
+	while (filestreamtem >> tid && filestreamtem >> tname && filestreamtem >> tdid)
+	{
+		if (tdid == 1)
+		{
+			workt = new Employee(tid, tname, tdid);
+		}
+		else if (tdid == 2)
+		{
+			workt = new Manager(tid, tname, tdid);
+		}
+		else
+		{
+			workt = new Boss(tid, tname, tdid);
+		}
+		temwork[num] = workt;
+		num++;
+	}
+	filestreamtem.close();
+	return temwork;
+}
+
+
