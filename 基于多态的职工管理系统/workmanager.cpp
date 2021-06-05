@@ -218,5 +218,55 @@ worker** workmanager::getfiledata()
 	filestreamtem.close();
 	return temwork;
 }
+void workmanager::showemp()
+{
+	if (fileopenstate)
+	{
+		for (int ie=0;ie<m_EmpNum;ie++)
+		{
+			m_EmpArray[ie]->showinfo();
+		}
+	}else
+	{
+		cout << "文件不存在或者本地无记录" << endl;
+	}
+	system("pause");
+	system("cls");
+}
+int workmanager::returnexsitnum(int workid)
+{
+	for (int i=0;i<m_EmpNum;i++)
+	{
+		if (workid==m_EmpArray[i]->id)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+void workmanager::delemp()
+{
+	if(fileopenstate)
+	{
+		cout << "请输入要删除工人的ID：";
+		int id;
+		cin >> id;
+		for (int i=returnexsitnum(id);i+1<m_EmpNum;i++)
+		{
+			m_EmpArray[i] = m_EmpArray[i + 1];
+		}
+		m_EmpNum--;
+		save();
+		cout << "已删除并保存到文件" << endl;
+	}else
+	{
+		cout << "记录为空或者文件不存在" << endl;
+	}
+	system("pause");
+	system("cls");
+	return;
+}
+
 
 
