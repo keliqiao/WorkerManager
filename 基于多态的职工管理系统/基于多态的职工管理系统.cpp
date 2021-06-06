@@ -36,10 +36,12 @@ int main()
 			}
 		case 4://修改职工
 			{
+			wm.modifyworker();
 				break;
 			}
 		case 5://查找职工
 			{
+			wm.findemp();
 				break;
 			}
 		case 6://排序职工

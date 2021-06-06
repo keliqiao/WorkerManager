@@ -30,19 +30,8 @@ workmanager::workmanager()
 			return;
 		}else//当文件不为空时
 		{
-			int tenum;
-			tenum=getfilepeonum();
-			m_EmpNum = tenum;
-			cout << "当前文件中的总人数为：" << m_EmpNum << endl;
+			m_EmpNum = getfilepeonum();
 			m_EmpArray = getfiledata();
-			for (int inum=0;inum<m_EmpNum;inum++)
-			{
-				cout << m_EmpArray[inum]->id << " "
-					<< m_EmpArray[inum]->name << " "
-					<< m_EmpArray[inum]->deptId << endl;
-			}
-			
-			
 		}
 	}
 	
@@ -110,7 +99,16 @@ void workmanager::Add_Emp()
 			int dSelect;
 
 			cout << "请输入第 " << i + 1 << " 个新职工编号：" ;
+			todo4:
 			cin >> id;
+			for (int ill=0;ill<m_EmpNum;ill++)
+			{
+				if (id==m_EmpArray[ill]->id)
+				{
+					cout << "已存在，请重新输入职工编号：";
+					goto todo4;
+				}
+			}
 			cout << "您输入的是：" << id << endl;
 
 			cout << "请输入第 " << i + 1 << " 个新职工姓名：" << endl;
@@ -249,9 +247,20 @@ void workmanager::delemp()
 {
 	if(fileopenstate)
 	{
-		cout << "请输入要删除工人的ID：";
+		cout << "请输入要删除工人的编号：";
 		int id;
+		todo0:
 		cin >> id;
+		for (int i=0;i<m_EmpNum;i++)
+		{
+			if (id==m_EmpArray[i]->id)
+			{
+				goto todo1;
+			}
+		}
+		cout << "未找到此工人，请重新输入：";
+		goto todo0;
+		todo1:
 		for (int i=returnexsitnum(id);i+1<m_EmpNum;i++)
 		{
 			m_EmpArray[i] = m_EmpArray[i + 1];
@@ -266,6 +275,137 @@ void workmanager::delemp()
 	system("pause");
 	system("cls");
 	return;
+}
+void workmanager::modifyworker()
+{
+	if (fileopenstate)
+	{
+		cout << "请输入修改的职工编号：";
+		int id;
+		cin >> id;
+		int result=returnexsitnum(id);
+		if (result==-1)
+		{
+			cout << "未找到此人" << endl;
+		}else
+		{
+			int newid = 0;
+			string newname = " ";
+			int newdid = 0;
+			cout << "当前职工编号：" << m_EmpArray[result]->id << endl<< "请输入变更后的职工编号：";
+			todo4:
+			cin >> newid;
+			for (int il = 0; il < m_EmpNum; il++)
+			{
+				if (newid == m_EmpArray[il]->id)
+				{
+					cout << "已存在，请重新输入职工编号：";
+					goto todo4;
+				}
+			}
+			cout << "您输入的是：" << newid << endl;
+			cout << "当前职工姓名：" << m_EmpArray[result]->name<< endl << "请输入变更后的姓名：";
+			cin >> newname;
+			cout << "您输入的是：" << newname << endl;
+			cout << "当前职工职位号：" << m_EmpArray[result]->deptId<< endl << "请输入变更后的职位代码，1：员工；2：经理；3：老板：";
+			todo3:
+			cin >> newdid;
+			cout << "您输入的是：" << ((newdid == 1) ? "普通职工" : (newdid == 2) ? "经理" : (newdid == 3) ? "老板" : "非法输入") << endl;
+			if (newdid != 1 && newdid != 2 && newdid != 3)
+			{
+				cout << "请重新输入：";
+				goto todo3;
+			}
+			worker* wr1 = NULL;
+			switch (newdid)
+			{
+			case 1: //普通员工
+				wr1 = new Employee(newid, newname, 1);
+				break;
+			case 2: //经理
+				wr1 = new Manager(newid, newname, 2);
+				break;
+			case 3:  //老板
+				wr1= new Boss(newid, newname, 3);
+				break;
+			default:
+				cout << "非法输入！";
+				break;
+			}
+			m_EmpArray[result] = wr1;
+			save();
+			cout << "修改成功并保存到本地文件" << endl;
+		}
+	}else
+	{
+		cout << "文件不存在或者为空" << endl;
+	}
+	system("pause");
+	system("cls");
+}
+void workmanager::findemp()
+{
+	if (!fileopenstate)
+	{
+		cout << "文件不存在或者记录为空" << endl;
+	}else
+	{
+		cout << "请输入查找方式；1：编号查找；2：姓名查找：" ;
+		int select = 0;
+		todo:
+		cin >> select;
+		if (select==1)
+		{
+			//按照编号查找
+			cout << "请输入职工编号：";
+			int tempid;
+			cin >> tempid;
+			bool findstate = false;
+			for (int i=0;i<m_EmpNum;i++)
+			{
+				if (tempid==m_EmpArray[i]->id)
+				{
+					findstate = true;
+					m_EmpArray[i]->showinfo();
+				}
+			}
+			if(findstate)
+			{
+				cout << "存在此员工" << endl;
+			}else
+			{
+				cout << "不存在此员工" << endl;
+			}
+		}else if(select==2)
+		{
+			//按照姓名查找
+			cout << "请输入要查找的员工姓名：";
+			bool findstate=false;
+			string tempname;
+			cin >> tempname;
+			for (int i=0;i<m_EmpNum;i++)
+			{
+				if (tempname==m_EmpArray[i]->name)
+				{
+					findstate = true;
+					m_EmpArray[i]->showinfo();
+				}
+			}
+			if (findstate)
+			{
+				cout << "存在此员工" << endl;
+			}else
+			{
+				cout << "不存在此员工" << endl;
+			}
+		}else
+		{
+			cout << "输入有误，请重新输入：";
+			goto todo;
+		}
+		system("pause");
+		system("cls");
+	}
 }
 
 

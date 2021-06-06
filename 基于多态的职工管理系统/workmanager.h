@@ -30,4 +30,8 @@ public:
 	void delemp();
 	//返回职工所在数据位置
 	int returnexsitnum(int workid);
+	//修改职工
+	void modifyworker();
+	//查找职工
+	void findemp();
 };
