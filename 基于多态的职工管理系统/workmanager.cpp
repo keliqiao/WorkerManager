@@ -41,6 +41,14 @@ workmanager::~workmanager()
 {
 	if (m_EmpArray != NULL)
 	{
+		for (int i=0;i<m_EmpNum;i++)
+		{
+			if (m_EmpArray[i]!=NULL)
+			{
+				delete m_EmpArray[i];
+				m_EmpArray[i] = NULL;
+			}
+		}
 		delete[] m_EmpArray;
 		m_EmpArray = NULL;
 	}
@@ -406,6 +414,60 @@ void workmanager::findemp()
 		system("pause");
 		system("cls");
 	}
+}
+void workmanager::sortemp()
+{
+	if (fileopenstate)
+	{
+		cout << "请选择排序方式；1：升序；2：降序：";
+		int selectednum = 1;
+		todo:
+		cin >> selectednum;
+		if (selectednum==1)
+		{
+			for (int x=0;x<m_EmpNum;x++)
+			{
+				
+				for (int y=0;y<m_EmpNum-x-1;y++)
+				{
+					if (m_EmpArray[y]->id>m_EmpArray[y+1]->id)
+					{
+						worker* worktemp = m_EmpArray[y+1];
+						m_EmpArray[y+1] = m_EmpArray[y];
+						m_EmpArray[y] = worktemp;
+					}
+				}
+			}
+		}else if (selectednum	==2)
+		{
+			for (int x = 0; x < m_EmpNum; x++)
+			{
+
+				for (int y = 0; y < m_EmpNum - x - 1; y++)
+				{
+					if (m_EmpArray[y]->id < m_EmpArray[y + 1]->id)
+					{
+						worker* worktemp = m_EmpArray[y + 1];
+						m_EmpArray[y + 1] = m_EmpArray[y];
+						m_EmpArray[y] = worktemp;
+					}
+				}
+			}
+		}else
+		{
+			cout << "输入有误，请重新输入：";
+			goto todo;
+		}
+	}else
+	{
+		cout << "文件不存在或者记录为空"<<endl;
+	}
+	save();
+	showemp();
+}
+void workmanager::cleanfiles()
+{
+	
 }
 
 

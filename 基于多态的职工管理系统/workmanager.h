@@ -34,4 +34,8 @@ public:
 	void modifyworker();
 	//查找职工
 	void findemp();
+	//按编号排序
+	void sortemp();
+	//清空文件
+	void cleanfiles();
 };
