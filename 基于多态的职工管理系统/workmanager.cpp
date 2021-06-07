@@ -467,7 +467,40 @@ void workmanager::sortemp()
 }
 void workmanager::cleanfiles()
 {
-	
+	cout << "确定清空文件吗？1：清空；2：不清空：";
+	int selectnum1;
+	todo:
+	cin >> selectnum1;
+	if (selectnum1==1)
+	{
+		ofstream filestream(FILENAME, ios::trunc);
+		filestream.close();
+		if (m_EmpArray!=NULL)
+		{
+			for (int i=0;i<m_EmpNum;i++)
+			{
+				if (m_EmpArray[i]!=NULL)
+				{
+					delete m_EmpArray[i];
+					m_EmpArray[i] = NULL;
+				}
+			}
+			delete[] m_EmpArray;
+			m_EmpArray = NULL;
+			m_EmpNum = 0;
+			fileopenstate = false;
+			cout << "清空成功" << endl;
+		}
+	}else if (selectnum1==2)
+	{
+		cout << "没有做任何操作！" << endl;
+	}else
+	{
+		cout << "非法输入，请重新输入：";
+		goto todo;
+	}
+	system("pause");
+	system("cls");
 }
 
 

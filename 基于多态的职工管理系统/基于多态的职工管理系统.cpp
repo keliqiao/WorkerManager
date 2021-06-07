@@ -51,6 +51,7 @@ int main()
 			}
 		case 7://гЕ©унд╪Ч
 			{
+			wm.cleanfiles();
 				break;
 			}
 		default:
